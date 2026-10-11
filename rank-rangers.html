@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rank Rangers: Operations Gym</title>
+<style>
+:root{--bg:#eef3f8;--grid:#d5e0ec;--ink:#14213d;--mut:#55627a;--card:#fff;--pv:#ffc857;--ok:#1f8a70;--bad:#d1432a;--ac:#2f5bea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a2e;--grid:#1b2a45;--ink:#eaf0fb;--mut:#9fb0cc;--card:#17243d;--ok:#46c9a5;--bad:#ff7a5c;--ac:#7da0ff}}
+:root[data-theme="dark"]{--bg:#0f1a2e;--grid:#1b2a45;--ink:#eaf0fb;--mut:#9fb0cc;--card:#17243d;--ok:#46c9a5;--bad:#ff7a5c;--ac:#7da0ff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg) linear-gradient(var(--grid) 1px,transparent 1px) 0 0/24px 24px;color:var(--ink);font:16px/1.5 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+main{max-width:640px;margin:0 auto;padding:14px}h1{font-size:1.9rem;margin:.1em 0;letter-spacing:-.02em;line-height:1.1}h2{font-size:1.2rem;margin:.2em 0 .4em}p{margin:.4em 0}.sub{color:var(--mut)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.chip{background:var(--card);border:2px solid var(--ink);border-radius:10px;padding:3px 10px;font-weight:700;font-size:.9rem}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:14px;margin:12px 0;box-shadow:4px 4px 0 var(--ink)}
+button,select,input{font:inherit;color:var(--ink)}
+button{font-weight:700;background:var(--card);border:2px solid var(--ink);border-radius:10px;padding:9px 13px;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}button:active{transform:translate(2px,2px);box-shadow:none}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.pri{background:var(--pv);color:#14213d}button:disabled{opacity:.45}
+select,input{background:var(--card);border:2px solid var(--ink);border-radius:8px;padding:7px}input{width:80px;text-align:center}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.tr{display:grid;grid-template-columns:1fr auto;gap:6px;width:100%;text-align:left;margin:8px 0}.tr small{display:block;font-weight:400;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.grid button{padding:8px 0}.s1{background:#ffe9a8;color:#14213d}.s2{background:#ffc857;color:#14213d}.s3{background:var(--ok);color:#fff}
+.mats{overflow-x:auto;padding:4px 0}table.m{border-collapse:separate;border-spacing:3px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);border-radius:8px;margin:4px 0}
+table.m td{min-width:38px;text-align:center;font-size:1.15rem;font-weight:600;padding:2px 4px}table.m td.h{font-size:.7rem;color:var(--mut);font-weight:400}td.sp{border-left:2px dashed var(--ink)}
+.opts{display:grid;gap:8px;margin-top:10px}.opts button{text-align:left}.right{background:var(--ok)!important;color:#fff}.wrong{background:var(--bad)!important;color:#fff}
+.fb{margin-top:10px;padding:10px;border:2px solid var(--ink);border-radius:10px}.log{font-size:.9rem;color:var(--mut)}.big{font-size:2rem;font-weight:800}
+.link{background:none;border:none;box-shadow:none;color:var(--ac);text-decoration:underline;padding:4px 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.c-s{background:#d9c2ff!important;color:#14213d}.c-k{background:#ffcf99!important;color:#14213d}.c-a{background:#a8d4ff!important;color:#14213d}.gd{background:var(--ok)!important;color:#fff;border-radius:6px}
+.t-s{color:#8a4dff;font-weight:700}.t-k{color:#d9730d;font-weight:700}.t-a{color:#2f7be5;font-weight:700}
+:root[data-theme="dark"] .t-s,:root:not([data-theme="light"]) .t-s{color:#c2a0ff}
+.cf{position:relative;height:0;overflow:visible;pointer-events:none}.cf span{position:absolute;top:-10px;font-size:1.4rem;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(240px) rotate(300deg);opacity:0}}
+td.sp{border-left:2px dashed var(--ink)}
+</style></head><body><main>
+<div class="row" style="margin:0"><svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true"><path d="M12 6H6v34h6M34 6h6v34h-6" fill="none" stroke="currentColor" stroke-width="3"/><rect x="14" y="12" width="7" height="7" fill="#ffc857"/><rect x="25" y="12" width="7" height="7" fill="#2f7be5"/><rect x="14" y="24" width="7" height="7" fill="#8a4dff"/><rect x="25" y="24" width="7" height="7" fill="#1f8a70"/></svg><h1>Rank Rangers</h1></div><p class="sub">Operations Gym: 175 questions, from “what is a matrix?” to eigenvectors.</p>
+<div class="bar" id="bar"></div><div id="v"></div></main>
+<script>
+(function(){
+var E=1e-9,$=function(i){return document.getElementById(i)},S={xp:0,d:{}},cur=null;
+try{var sv=JSON.parse(localStorage.getItem('rr2')||'null');if(sv){S=sv}}catch(e){}
+function save(){try{localStorage.setItem('rr2',JSON.stringify(S))}catch(e){}}
+function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function ri(R,a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(R,a){return a[ri(R,0,a.length-1)]}
+function fmt(x){if(Math.abs(x-Math.round(x))<E)return String(Math.round(x)).replace('-','\u2212');for(var d=2;d<=60;d++){var n=x*d;if(Math.abs(n-Math.round(n))<1e-7)return(n<0?'\u2212':'')+Math.abs(Math.round(n))+'/'+d}return x.toFixed(2)}
+function cp(M){return M.map(function(r){return r.slice()})}
+function T(M){return M[0].map(function(_,j){return M.map(function(r){return r[j]})})}
+function nz(x){return Math.abs(x)>E}
+function mat(M,o){o=o||{};var h='<table class="m">';if(o.h){h+='<tr><td class="h"></td>';M[0].forEach(function(_,j){h+='<td class="h">C'+(j+1)+'</td>'});h+='</tr>'}
+M.forEach(function(r,i){h+='<tr>'+(o.h?'<td class="h">R'+(i+1)+'</td>':'');r.forEach(function(v,j){h+='<td'+(((o.sp&&j===o.sp?'sp ':'')+(o.hl?o.hl(i,j):''))?' class="'+((o.sp&&j===o.sp?'sp ':'')+(o.hl?o.hl(i,j):''))+'"':'')+'>'+fmt(v)+'</td>'});h+='</tr>'});return h+'</table>'}
+function ms(M){return'['+M.map(function(r){return r.map(fmt).join(' ')}).join('; ')+']'}
+function rankOf(M){var R=cp(M),r=0;for(var c=0;c<R[0].length&&r<R.length;c++){var p=-1;for(var i=r;i<R.length;i++)if(nz(R[i][c])){p=i;break}if(p<0)continue;var t=R[p];R[p]=R[r];R[r]=t;for(i=r+1;i<R.length;i++){var f=R[i][c]/R[r][c];for(var j=0;j<R[0].length;j++)R[i][j]-=f*R[r][j]}r++}return r}
+function det(M){var n=M.length;if(n===1)return M[0][0];if(n===2)return M[0][0]*M[1][1]-M[0][1]*M[1][0];var d=0;for(var j=0;j<n;j++)d+=(j%2?-1:1)*M[0][j]*det(M.slice(1).map(function(r){return r.filter(function(_,k){return k!==j})}));return d}
+function inv(M){var n=M.length,A=M.map(function(r,i){return r.concat(r.map(function(_,j){return i===j?1:0}))});for(var c=0;c<n;c++){var p=c;for(var i=c;i<n;i++)if(Math.abs(A[i][c])>Math.abs(A[p][c]))p=i;var t=A[p];A[p]=A[c];A[c]=t;var d=A[c][c];A[c]=A[c].map(function(v){return v/d});for(i=0;i<n;i++)if(i!==c){var f=A[i][c];A[i]=A[i].map(function(v,j){return v-f*A[c][j]})}}return A.map(function(r){return r.slice(n)})}
+// ---- operations
+function app(M,o){var R=cp(M),m=R.length,n=R[0].length,i;
+if(o.c){for(i=0;i<m;i++){if(o.t==='s'){var t=R[i][o.a];R[i][o.a]=R[i][o.b];R[i][o.b]=t}else if(o.t==='k')R[i][o.a]*=o.k;else R[i][o.a]+=o.k*R[i][o.b]}}
+else{if(o.t==='s'){var t2=R[o.a];R[o.a]=R[o.b];R[o.b]=t2}else if(o.t==='k')R[o.a]=R[o.a].map(function(v){return v*o.k});else R[o.a]=R[o.a].map(function(v,j){return v+o.k*R[o.b][j]})}return R}
+function lab(o){var L=o.c?'C':'R',a=L+(o.a+1),b=L+(o.b+1),k=fmt(Math.abs(o.k||0));if(o.t==='s')return a+' \u2194 '+b;if(o.t==='k')return a+' \u2192 '+(fmt(o.k)==='1'?'':fmt(o.k)+'\u00b7')+a;return a+' \u2192 '+a+(o.k<0?' \u2212 ':' + ')+(k==='1'?'':k+'\u00b7')+b}
+function hintNF(M){var m=M.length,n=M[0].length,k=0;
+while(k<Math.min(m,n)){var ok=Math.abs(M[k][k]-1)<E;for(var i=0;i<m&&ok;i++)if(i!==k&&nz(M[i][k]))ok=false;for(var j=0;j<n&&ok;j++)if(j!==k&&nz(M[k][j]))ok=false;if(!ok)break;k++}
+if(k>=Math.min(m,n))return null;var pi=-1,pj=-1,best=9;for(i=k;i<m;i++)for(j=k;j<n;j++)if(nz(M[i][j])){var s=Math.abs(Math.abs(M[i][j])-1)<E?0:1;if(s<best){best=s;pi=i;pj=j}}
+if(pi<0)return null;if(pi!==k)return{t:'s',a:k,b:pi};if(pj!==k)return{t:'s',c:1,a:k,b:pj};
+if(Math.abs(M[k][k]-1)>E)return{t:'k',a:k,k:1/M[k][k]};
+for(i=0;i<m;i++)if(i!==k&&nz(M[i][k]))return{t:'a',a:i,b:k,k:-M[i][k]};
+for(j=0;j<n;j++)if(j!==k&&nz(M[k][j]))return{t:'a',c:1,a:j,b:k,k:-M[k][j]};return null}
+function hintGJ(M){var n=M.length;for(var c=0;c<n;c++){if(Math.abs(M[c][c])<E){for(var i=c+1;i<n;i++)if(nz(M[i][c]))return{t:'s',a:c,b:i}}
+if(nz(M[c][c])&&Math.abs(M[c][c]-1)>E)return{t:'k',a:c,k:1/M[c][c]};for(i=0;i<n;i++)if(i!==c&&nz(M[i][c]))return{t:'a',a:i,b:c,k:-M[i][c]}}return null}
+function par(M,h){var n=0,X=M;while(n<60){var o=h(X);if(!o)break;X=app(X,o);n++}return n}
+function genM(L,R){var m,n;if(L<=20){m=2;n=2}else if(L<=40){var q=pick(R,[[2,3],[3,2],[3,3]]);m=q[0];n=q[1]}else if(L<=70){m=3;n=3}else if(L<=85){var q2=pick(R,[[3,4],[4,3]]);m=q2[0];n=q2[1]}else{var q3=pick(R,[[4,4],[3,4],[4,3]]);m=q3[0];n=q3[1]}
+var mx=L<=20?2:L<=60?3:4,M,t=0;do{var rows=[];for(var i=0;i<m;i++){var r=[];for(var j=0;j<n;j++)r.push(ri(R,-mx,mx));rows.push(r)}M=rows;
+if(L<=40&&L%3)M[0][0]=1;if(L>60)M[0][0]=0;if(L>40&&m>=3&&R()<.7){var x=pick(R,[1,2,-1]),y=pick(R,[1,-1]);M[m-1]=M[0].map(function(v,j){return x*v+y*M[1][j]})}
+if(L>20&&L<=40&&R()<.4){M[m-1]=M[0].map(function(v){return v*2})}t++}while(rankOf(M)===0&&t<30);return M}
+// ---- tracks
+var IC={i:'📘',g:'⚙️',j:'🔁',h:'🧮',c:'⚖️',e:'🧭'};
+var TR=[{k:'i',n:'Introduction to matrix',c:15,d:'Start here: order, entries, types, transpose, first row operation'},{k:'g',n:'Operations Gym: normal form',c:100,d:'Row and column ops to reach [Ir 0; 0 0], then read the rank'},
+{k:'j',n:'Gauss-Jordan inverse',c:15,d:'Row operations on [A | I] until [I | A\u207b\u00b9]'},
+{k:'h',n:'Inverse by Cayley-Hamilton',c:15,d:'Characteristic equation, then A\u207b\u00b9'},
+{k:'c',n:'Consistency and solving',c:15,d:'Compare ranks, then solve'},
+{k:'e',n:'Eigenvalues and eigenvectors',c:15,d:'Find \u03bb and the vector for the greatest \u03bb'}];
+function bar(){var n=0;TR.forEach(function(t){for(var i=1;i<=t.c;i++)if(S.d[t.k+i])n++});$('bar').innerHTML='<span class="chip">'+S.xp+' XP</span><span class="chip">'+n+' / 175 cleared</span>'}
+function home(){cur=null;bar();var h=ring()+'<div class="card"><h2>3-hour mastery plan</h2><p>15 min: Introduction (do it first). 40 min: Gym 1–40 (2×2 and 3×3). 55 min: Gym 41–100 (zero pivots, dependent rows, 4×4). 15 min each: Gauss-Jordan, Cayley-Hamilton, Consistency, Eigen. Match the par move count without hints for 3 stars.</p></div>';
+TR.forEach(function(t,i){var d=0;for(var q=1;q<=t.c;q++)if(S.d[t.k+q])d++;h+='<button class="card tr" data-i="'+i+'"><span><b>'+IC[t.k]+' '+t.n+'</b><small>'+t.d+'</small></span><span>'+d+'/'+t.c+'</span></button>'});$('v').innerHTML=h;
+Array.prototype.forEach.call(document.querySelectorAll('.tr'),function(b){b.onclick=function(){list(TR[+b.dataset.i])}})}
+function list(t){cur=null;var h='<div class="row"><button id="bk">Back</button><b>'+t.n+'</b></div><div class="card"><div class="grid">';
+for(var i=1;i<=t.c;i++){var s=S.d[t.k+i]||0;h+='<button class="'+(s?'s'+s:'')+'" data-n="'+i+'">'+i+'</button>'}$('v').innerHTML=h+'</div><p class="sub">Cleared levels are coloured. Stars: yellow 1\u20132, green 3.</p></div>';
+$('bk').onclick=home;Array.prototype.forEach.call(document.querySelectorAll('.grid button'),function(b){b.onclick=function(){play(t,+b.dataset.n)}})}
+function play(t,n){var R=rng(n*7919+t.k.charCodeAt(0)*131);if(t.k==='g'||t.k==='j')ops(t,n,R);else mcq(t,n,R)}
+// ---- operations screen
+function ops(t,n,R){var gj=t.k==='j',M0,M;
+if(gj){var sz=n<=6?2:3,d;do{M0=[];for(var i=0;i<sz;i++){var r=[];for(var j=0;j<sz;j++)r.push(ri(R,-2,n<=10?3:4));M0.push(r)}d=Math.abs(det(M0))}while(d<1||d>(n<=3?1:3));M=M0.map(function(r,i){return r.concat(r.map(function(_,j){return i===j?1:0}))})}
+else{M0=genM(n,R);M=cp(M0)}
+var rk=gj?M0.length:rankOf(M0),H=gj?hintGJ:hintNF,P=par(M,H),G={M:M,st:[cp(M)],log:[],hint:0,t0:Date.now(),done:false};
+function chk(X){if(gj){for(var i=0;i<X.length;i++)for(var j=0;j<X.length;j++)if(Math.abs(X[i][j]-(i===j?1:0))>1e-6)return false;return true}
+for(i=0;i<X.length;i++)for(j=0;j<X[0].length;j++)if(Math.abs(X[i][j]-((i===j&&i<rk)?1:0))>1e-6)return false;return true}
+var m=M.length,nc=gj?m:M[0].length;
+function HL(X){return function(i,j){if(i===j&&Math.abs(X[i][j]-1)<1e-9&&i<(gj?m:rk))return'gd';var o=G.last;if(o&&(o.c?(j===o.a||(o.t==='s'&&j===o.b)):(i===o.a||(o.t==='s'&&i===o.b))))return'c-'+o.t;return''}}
+function draw(){var X=G.st[G.st.length-1],h='<div class="row"><button id="bk">Back</button><b>'+t.n+' #'+n+'</b><span class="chip">Moves '+G.log.length+' (par '+P+')</span></div><div class="card"><p>'+(gj?'Row operations only: turn the left block into I. The right block becomes A\u207b\u00b9.':'Use row and column operations to reach normal form [Ir 0; 0 0].')+'</p><p class="log"><span class="t-s">Swap</span> &nbsp; <span class="t-k">Scale</span> &nbsp; <span class="t-a">Add multiple</span> &nbsp; Green = pivot done</p><div class="mats">'+mat(X,{h:!gj,sp:gj?m:0,hl:HL(X)})+'</div>';
+if(!G.done){h+='<div class="row"><select id="ty" aria-label="Operation type"><option value="rs">Swap two rows</option><option value="rk">Multiply a row by k</option><option value="ra">Row: Ri \u2192 Ri + k\u00b7Rj</option>'+(gj?'':'<option value="cs">Swap two columns</option><option value="ck">Multiply a column by k</option><option value="ca">Column: Ci \u2192 Ci + k\u00b7Cj</option>')+'</select></div><div class="row"><select id="ia" aria-label="First index"></select><select id="ib" aria-label="Second index"></select><input id="kk" value="1" inputmode="text" aria-label="k, e.g. -2 or 1/3"></div><p><b id="pv"></b></p><div class="row"><button class="pri" id="ap">Apply</button><button id="un"'+(G.log.length?'':' disabled')+'>Undo</button><button id="hn">Hint</button><button id="rs">Reset</button></div>'+(G.msg?'<p class="log">'+G.msg+'</p>':'')}
+else{var tm=Math.round((Date.now()-G.t0)/1000),st=G.hint?1:G.log.length<=P?3:G.log.length<=P+2?2:1;h+=conf()+'<div class="fb"><p class="big">'+'\u2605'.repeat(st)+'</p><p>Done in '+G.log.length+' moves (par '+P+'), '+tm+' s.'+(gj?'':' Rank = number of 1s = <b>'+rk+'</b>.')+'</p></div><div class="row">'+(n<t.c?'<button class="pri" id="nx">Next level</button>':'')+'<button id="rp">Replay</button></div>'}
+h+='<details><summary>Your steps</summary><p class="log">'+(G.log.join('<br>')||'None yet')+'</p></details></div>';$('v').innerHTML=h;
+$('bk').onclick=function(){list(t)};if(G.done){if($('nx'))$('nx').onclick=function(){play(t,n+1)};$('rp').onclick=function(){play(t,n)};return}
+var ty=$('ty'),ia=$('ia'),ib=$('ib'),kk=$('kk');
+function opts(el,cnt,L,sel){el.innerHTML='';for(var i=0;i<cnt;i++){var o=document.createElement('option');o.value=i;o.textContent=L+(i+1);if(i===sel)o.selected=true;el.appendChild(o)}}
+function cur2(){var v=ty.value,c=v[0]==='c',kind=v[1];return{c:c,t:kind==='s'?'s':kind==='k'?'k':'a',a:+ia.value,b:+ib.value,k:parseKV(kk.value)}}
+function ui(){var v=ty.value,c=v[0]==='c',cnt=c?nc:m,L=c?'C':'R',kind=v[1],pa=ia.value||0,pb=ib.value||(cnt>1?1:0);opts(ia,cnt,L,Math.min(+pa,cnt-1));opts(ib,cnt,L,Math.min(+pb,cnt-1));ib.style.display=kind==='k'?'none':'';kk.style.display=kind==='s'?'none':'';pv()}
+function pv(){var o=cur2();$('pv').className='t-'+o.t;$('pv').textContent=isNaN(o.k)&&o.t!=='s'?'Enter k as a number or fraction':lab(o)}
+ty.onchange=ui;ia.onchange=pv;ib.onchange=pv;kk.oninput=pv;ui();
+$('ap').onclick=function(){var o=cur2();if(o.t!=='k'&&o.a===o.b&&o.t!=='k'){G.msg='Pick two different '+(o.c?'columns':'rows')+'.';return draw()}if(o.t!=='s'&&(isNaN(o.k)||(o.t==='k'&&!nz(o.k)))){G.msg=o.t==='k'?'k must be non-zero. Multiplying by 0 is not allowed.':'Enter a valid k.';return draw()}
+G.msg='';var X=app(G.st[G.st.length-1],o);G.st.push(X);G.log.push('<span class="t-'+o.t+'">'+lab(o)+'</span>');G.last=o;if(chk(X)){G.done=true;var st=G.hint?1:G.log.length<=P?3:G.log.length<=P+2?2:1;if(st>(S.d[t.k+n]||0)){S.xp+=(st-(S.d[t.k+n]||0))*10;S.d[t.k+n]=st;save()}bar()}draw()};
+$('un').onclick=function(){G.st.pop();G.log.pop();G.msg='';G.last=null;draw()};$('rs').onclick=function(){G.st=[cp(M)];G.log=[];G.msg='';G.last=null;draw()};
+$('hn').onclick=function(){var o=H(G.st[G.st.length-1]);G.hint=1;G.msg=o?'Hint: '+lab(o):'Nothing left to do.';draw()}}
+draw()}
+function parseKV(s){s=String(s).trim().replace('\u2212','-');if(s.indexOf('/')>0){var p=s.split('/');return parseFloat(p[0])/parseFloat(p[1])}return parseFloat(s)}
+// ---- MCQ tracks
+function mcq(t,n,R){var q=t.k==='i'?genI(n,R):t.k==='h'?genH(n,R):t.k==='c'?genC(n,R):genE(n,R),ans=null;
+function draw(){var h='<div class="row"><button id="bk">Back</button><b>'+t.n+' #'+n+'</b></div><div class="card">'+(q.l?'<div class="fb" style="margin:0 0 10px"><b>Learn:</b> '+q.l+'</div>':'')+'<p>'+q.p+'</p><div class="mats">'+(q.M?mat(q.M,{sp:q.sp,h:q.hd}):'')+'</div><div class="opts">';
+q.o.forEach(function(o,i){h+='<button data-i="'+i+'" class="'+(ans!==null?(o===q.a?'right':i===ans?'wrong':''):'')+'"'+(ans!==null?' disabled':'')+'>'+o+'</button>'});h+='</div>';
+if(ans!==null){var ok=q.o[ans]===q.a;h+=(ok?conf():'')+'<div class="fb"><b>'+(ok?'Correct! +10 XP':'Answer: '+q.a)+'</b>'+q.w+'</div><div class="row">'+(n<t.c?'<button class="pri" id="nx">Next</button>':'')+'<button id="rp">Retry (new order)</button></div>'}
+$('v').innerHTML=h+'</div>';$('bk').onclick=function(){list(t)};Array.prototype.forEach.call(document.querySelectorAll('.opts button'),function(b){b.onclick=function(){ans=+b.dataset.i;if(q.o[ans]===q.a&&!S.d[t.k+n]){S.xp+=10;S.d[t.k+n]=3;save();bar()}draw()}});
+if($('nx'))$('nx').onclick=function(){play(t,n+1)};if($('rp'))$('rp').onclick=function(){ans=null;q.o.sort(function(){return Math.random()-.5});draw()}}
+q.o.sort(function(){return Math.random()-.5});draw()}
+function uniq(a,c){var o=[a];c.forEach(function(x){if(o.indexOf(x)<0&&o.length<4)o.push(x)});var k=0;while(o.length<4)o.push(a+' (alt '+(++k)+')');return o}
+function genH(n,R){var sz=n<=7?2:3,A,t=0;do{A=[];for(var i=0;i<sz;i++){var r=[];for(var j=0;j<sz;j++)r.push(ri(R,-2,3));A.push(r)}}while(!nz(det(A))&&t++<99);
+var tr=0,i2,c1,c2,c3=det(A);for(i2=0;i2<sz;i2++)tr+=A[i2][i2];c1=tr;c2=sz===2?c3:(function(){var s=0;for(var a=0;a<3;a++)for(var b=a+1;b<3;b++)s+=A[a][a]*A[b][b]-A[a][b]*A[b][a];return s})();
+var I=inv(A),adj=I.map(function(r){return r.map(function(v){return v*c3})}),neg=I.map(function(r){return r.map(function(v){return-v})});
+var eq=sz===2?'\u03bb\u00b2 \u2212 '+fmt(c1)+'\u03bb + '+fmt(c3)+' = 0':'\u03bb\u00b3 \u2212 '+fmt(c1)+'\u03bb\u00b2 + '+fmt(c2)+'\u03bb \u2212 '+fmt(c3)+' = 0';
+var rule=sz===2?'A\u00b2 \u2212 '+fmt(c1)+'A + '+fmt(c3)+'I = 0, so A\u207b\u00b9 = ('+fmt(c1)+'I \u2212 A)/'+fmt(c3):'A\u00b3 \u2212 '+fmt(c1)+'A\u00b2 + '+fmt(c2)+'A \u2212 '+fmt(c3)+'I = 0, so A\u207b\u00b9 = (A\u00b2 \u2212 '+fmt(c1)+'A + '+fmt(c2)+'I)/'+fmt(c3);
+return{p:'Use the Cayley-Hamilton theorem to find A\u207b\u00b9.',M:A,a:ms(I),o:uniq(ms(I),[ms(neg),ms(T(I)),ms(adj),ms(T(adj))]),w:'<p>Characteristic equation: '+eq+'</p><p>Cayley-Hamilton: '+rule+'. Check: trace = '+fmt(c1)+', det = '+fmt(c3)+'.</p>'}}
+function genC(n,R){var sz=n<=5?2:3,ty=pick(R,['u','i','x']),A,b,x,t=0;
+do{A=[];for(var i=0;i<sz;i++){var r=[];for(var j=0;j<sz;j++)r.push(ri(R,-2,3));A.push(r)}t++}while((ty==='u'?!nz(det(A)):nz(det(A))&&t<500));
+if(ty!=='u'){var f=pick(R,[2,-1]);if(sz===2)A[1]=A[0].map(function(v){return f*v});else A[2]=A[0].map(function(v,j){return v+A[1][j]})}
+x=[];for(i=0;i<sz;i++)x.push(ri(R,-2,3));b=A.map(function(r){return r.reduce(function(s,v,j){return s+v*x[j]},0)});
+if(ty!=='u'&&sz===2)b[1]=f*b[0];if(ty!=='u'&&sz===3)b[2]=b[0]+b[1];if(ty==='x')b[sz-1]+=1;
+var V=['x','y','z'],aug=A.map(function(r,i){return r.concat([b[i]])}),ra=rankOf(A),rb=rankOf(aug),eqs=A.map(function(r,i){return r.map(function(v,j){return fmt(v)+V[j]}).join(' + ')+' = '+fmt(b[i])}).join('<br>');
+function us(v){return'Unique: '+v.map(function(c,i){return V[i]+'='+fmt(c)}).join(', ')}
+var ans=ty==='u'?us(x):ty==='i'?'Infinitely many solutions':'Inconsistent (no solution)',w=x.map(function(v,i){return i===0?v+1:v}),w2=x.map(function(v,i){return i===sz-1?v-1:v});
+var why='<p>rank(A) = '+ra+', rank([A|B]) = '+rb+', unknowns = '+sz+'. '+(ra!==rb?'Ranks differ, so the system is inconsistent.':ra===sz?'Ranks are equal and equal the unknowns, so the solution is unique: '+us(x)+'.':'Ranks are equal but less than '+sz+', so there are infinitely many solutions.')+'</p>';
+return{p:'Test the consistency of the system. If consistent, solve it.<br><b>'+eqs+'</b>',M:aug,sp:sz,a:ans,o:uniq(ans,[ty==='u'?'Infinitely many solutions':us(w),ty==='x'?us(w2):'Inconsistent (no solution)',ty==='u'?us(w):'Infinitely many solutions',us(w2)]),w:why}}
+function genE(n,R){var l1,l2;do{l1=ri(R,-3,5);l2=ri(R,-3,5)}while(l1===l2);var p=ri(R,-2,2),q=ri(R,-2,2),V=[[1,p],[q,1+p*q]],Vi=[[1+p*q,-p],[-q,1]],D=[[l1,0],[0,l2]];
+function mm(a,b){return a.map(function(r){return b[0].map(function(_,j){return r.reduce(function(s,v,k){return s+v*b[k][j]},0)})})}
+var A=mm(mm(V,D),Vi),tr=l1+l2,dt=l1*l2,lo=Math.min(l1,l2),hi=Math.max(l1,l2),vh=l1>l2?[1,q]:[p,1+p*q],vl=l1>l2?[p,1+p*q]:[1,q];
+function vs(v){return'k\u00b7('+fmt(v[0])+', '+fmt(v[1])+')'}
+var ch='<p>Characteristic equation: \u03bb\u00b2 \u2212 '+fmt(tr)+'\u03bb + '+fmt(dt)+' = 0, so \u03bb = '+lo+', '+hi+'.</p>';
+if(n%2){var a='\u03bb = '+lo+', '+hi,alt=[hi+1,lo-1],o=uniq(a,['\u03bb = '+(-lo)+', '+(-hi),'\u03bb = '+alt[1]+', '+hi,'\u03bb = '+lo+', '+alt[0]]);return{p:'Find the eigenvalues of A.',M:A,a:a,o:o,w:ch}}
+var ans=vs(vh);return{p:'Find the eigenvector for the greatest eigenvalue of A.',M:A,a:ans,o:uniq(ans,[vs(vl),vs([vh[1],vh[0]]),vs([vh[0],-vh[1]])]),w:ch+'<p>For \u03bb = '+hi+', solve (A \u2212 '+hi+'I)x = 0 using row operations. The eigenvector is '+ans+'.</p>'}}
+function conf(){if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)return'';var e=['\U0001F389','\u2B50','\u2728','\U0001F7E3','\U0001F7E0','\U0001F535'],h='<div class="cf" aria-hidden="true">';for(var i=0;i<20;i++)h+='<span style="left:'+(i*5)+'%;animation-delay:'+(i%7*.12)+'s">'+e[i%6]+'</span>';return h+'</div>'}
+function ring(){var tot=0,dn=0;TR.forEach(function(t){tot+=t.c;for(var i=1;i<=t.c;i++)if(S.d[t.k+i])dn++});var f=dn/tot,C=2*Math.PI*34;return'<div class="card row"><svg width="84" height="84" viewBox="0 0 84 84" role="img" aria-label="Progress"><circle cx="42" cy="42" r="34" fill="none" stroke="var(--grid)" stroke-width="10"/><circle cx="42" cy="42" r="34" fill="none" stroke="var(--ok)" stroke-width="10" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+C*(1-f)+'" transform="rotate(-90 42 42)"/><text x="42" y="47" text-anchor="middle" font-size="15" font-weight="800" fill="currentColor">'+Math.round(f*100)+'%</text></svg><div><b>'+dn+' of '+tot+' cleared</b><p class="sub">Start with Introduction to matrix, then the Gym.</p></div></div>'}
+function rm(R,m,n,lo,hi){var M=[];for(var i=0;i<m;i++){var r=[];for(var j=0;j<n;j++)r.push(ri(R,lo,hi));M.push(r)}return M}
+function genI(n,R){var m=ri(R,2,3),k=ri(R,2,4),A=rm(R,m,k,-5,9),i=ri(R,1,m),j=ri(R,1,k),a,L,v;
+function num(v){return uniq(fmt(v),[fmt(v+1),fmt(v-1),fmt(-v),fmt(v+2)])}
+function sb(x,y){return'a<sub>'+x+y+'</sub>'}
+switch(n){
+case 1:a=m+'\u00d7'+k;return{l:'A matrix is a rectangular table of numbers. Its <b>order</b> is rows \u00d7 columns. Rows run across, columns run down.',p:'What is the order of this matrix?',M:A,hd:1,a:a,o:uniq(a,[k+'\u00d7'+m,(m+1)+'\u00d7'+k,m+'\u00d7'+(k+1)]),w:'<p>It has '+m+' rows and '+k+' columns.</p>'};
+case 2:v=m*k;return{l:'Number of entries = rows \u00d7 columns.',p:'How many entries does this matrix have?',M:A,hd:1,a:fmt(v),o:num(v),w:'<p>'+m+' \u00d7 '+k+' = '+v+'.</p>'};
+case 3:v=A[i-1][j-1];return{l:sb('i','j')+' is the entry in row <b>i</b> and column <b>j</b>.',p:'Find '+sb(i,j)+'.',M:A,hd:1,a:fmt(v),o:num(v),w:'<p>Go to row '+i+', column '+j+': '+fmt(v)+'.</p>'};
+case 4:var vals=[];for(var q=1;q<=m*k;q++)vals.push(q);vals.sort(function(){return R()-.5});var B=[];for(q=0;q<m;q++)B.push(vals.slice(q*k,q*k+k));v=B[i-1][j-1];a=sb(i,j);return{l:'To locate a value, read its row number first, then its column number.',p:'Which position holds the entry '+v+'?',M:B,hd:1,a:a,o:uniq(a,[sb(j,i),sb(i,j%k+1),sb(i%m+1,j)]),w:'<p>'+v+' sits in row '+i+', column '+j+'.</p>'};
+case 5:var t=pick(R,['Row matrix','Column matrix','Square matrix','Zero matrix']),X=t==='Row matrix'?rm(R,1,3,1,9):t==='Column matrix'?rm(R,3,1,1,9):t==='Square matrix'?rm(R,2,2,1,9):[[0,0,0],[0,0,0]];return{l:'Special names: <b>row matrix</b> (1 row), <b>column matrix</b> (1 column), <b>square</b> (rows = columns), <b>zero</b> (all entries 0).',p:'What kind of matrix is this?',M:X,hd:1,a:t,o:uniq(t,['Row matrix','Column matrix','Square matrix','Zero matrix']),w:'<p>Order '+X.length+'\u00d7'+X[0].length+'.</p>'};
+case 6:var ty=pick(R,['Identity matrix','Diagonal matrix','Upper triangular','Lower triangular']),Y=[[0,0,0],[0,0,0],[0,0,0]];for(q=0;q<3;q++)for(var w=0;w<3;w++){if(q===w)Y[q][w]=ty==='Identity matrix'?1:ri(R,2,7);else if(ty==='Upper triangular'&&w>q)Y[q][w]=ri(R,1,5);else if(ty==='Lower triangular'&&w<q)Y[q][w]=ri(R,1,5)}return{l:'<b>Identity</b>: 1s on the diagonal, 0 elsewhere. <b>Diagonal</b>: only the diagonal is non-zero. <b>Upper triangular</b>: zeros below the diagonal. <b>Lower triangular</b>: zeros above it.',p:'Name this matrix.',M:Y,a:ty,o:uniq(ty,['Identity matrix','Diagonal matrix','Upper triangular','Lower triangular']),w:'<p>Look at where the non-zero entries are.</p>'};
+case 7:var b=ri(R,3,9),c=ri(R,1,3);return{l:'Two matrices are equal when they have the same order and all matching entries are equal.',p:'If A = B, find x.<br>A = [x + '+c+', 3; 1, 4], B = [ '+b+', 3; 1, 4 ]',a:fmt(b-c),o:num(b-c),w:'<p>x + '+c+' = '+b+', so x = '+(b-c)+'.</p>'};
+case 8:a=k+'\u00d7'+m;return{l:'The transpose A<sup>T</sup> swaps rows and columns, so order m\u00d7n becomes n\u00d7m.',p:'What is the order of A<sup>T</sup>?',M:A,hd:1,a:a,o:uniq(a,[m+'\u00d7'+k,(k+1)+'\u00d7'+m,k+'\u00d7'+(m+1)]),w:'<p>A is '+m+'\u00d7'+k+', so A<sup>T</sup> is '+k+'\u00d7'+m+'.</p>'};
+case 9:var I2=ri(R,1,k),J2=ri(R,1,m);v=A[J2-1][I2-1];return{l:'(A<sup>T</sup>)<sub>ij</sub> = a<sub>ji</sub>. Row i of A<sup>T</sup> is column i of A.',p:'Find the entry in row '+I2+', column '+J2+' of A<sup>T</sup>.',M:A,hd:1,a:fmt(v),o:num(v),w:'<p>It equals a<sub>'+J2+I2+'</sub> = '+fmt(v)+'.</p>'};
+case 10:var C3=rm(R,3,3,-3,6);v=C3[0][0]+C3[1][1]+C3[2][2];return{l:'<b>Trace</b> = sum of the main diagonal entries.',p:'Find the trace of A.',M:C3,a:fmt(v),o:num(v),w:'<p>'+fmt(C3[0][0])+' + '+fmt(C3[1][1])+' + '+fmt(C3[2][2])+' = '+fmt(v)+'.</p>'};
+case 11:var P1=rm(R,m,k,-4,6),P2=rm(R,m,k,-4,6);v=P1[i-1][j-1]+P2[i-1][j-1];return{l:'Matrices of the same order are added entry by entry.',p:'Find the entry in row '+i+', column '+j+' of A + B.<div class="mats">'+mat(P1)+mat(P2)+'</div>',a:fmt(v),o:num(v),w:'<p>'+fmt(P1[i-1][j-1])+' + '+fmt(P2[i-1][j-1])+' = '+fmt(v)+'.</p>'};
+case 12:var kk=pick(R,[2,3,-1]);v=kk*A[i-1][j-1];return{l:'Multiplying by a scalar k multiplies every entry by k.',p:'Find the entry in row '+i+', column '+j+' of '+kk+'A.',M:A,hd:1,a:fmt(v),o:num(v),w:'<p>'+kk+' \u00d7 '+fmt(A[i-1][j-1])+' = '+fmt(v)+'.</p>'};
+case 13:var pp=R()<.5?k:ri(R,2,4),qq=ri(R,2,4),yes=pp===k;a=yes?'Yes, order '+m+'\u00d7'+qq:'No, not defined';return{l:'AB exists only when columns of A = rows of B. Then AB has order (rows of A) \u00d7 (columns of B).',p:'A is '+m+'\u00d7'+k+' and B is '+pp+'\u00d7'+qq+'. Can we find AB?',a:a,o:uniq(a,['No, not defined','Yes, order '+m+'\u00d7'+qq,'Yes, order '+qq+'\u00d7'+m,'Yes, order '+m+'\u00d7'+pp]),w:'<p>Columns of A = '+k+', rows of B = '+pp+'.</p>'};
+case 14:var sy=pick(R,['Symmetric','Skew-symmetric','Neither']),Z=rm(R,3,3,1,6);for(q=0;q<3;q++)for(w=q+1;w<3;w++){if(sy==='Symmetric')Z[w][q]=Z[q][w];else if(sy==='Skew-symmetric')Z[w][q]=-Z[q][w];else if(Z[w][q]===Z[q][w])Z[w][q]+=1}if(sy==='Skew-symmetric')for(q=0;q<3;q++)Z[q][q]=0;return{l:'<b>Symmetric</b>: A = A<sup>T</sup>. <b>Skew-symmetric</b>: A<sup>T</sup> = \u2212A (diagonal is all 0).',p:'Is this matrix symmetric, skew-symmetric or neither?',M:Z,a:sy,o:uniq(sy,['Symmetric','Skew-symmetric','Neither','Identity matrix']),w:'<p>Compare each entry with its mirror across the diagonal.</p>'};
+default:var D=rm(R,3,3,-3,5),nr=D[1].map(function(x,z){return x-2*D[0][z]}),ar=function(r){return'['+r.map(fmt).join(' ')+']'};a=ar(nr);return{l:'A <b>row operation</b> like R2 \u2192 R2 \u2212 2R1 subtracts 2 times row 1 from row 2. This is the move you will use in the Gym.',p:'Apply R2 \u2192 R2 \u2212 2R1. What is the new row 2?',M:D,hd:1,a:a,o:uniq(a,[ar(D[1].map(function(x,z){return x+2*D[0][z]})),ar(D[0].map(function(x,z){return x-2*D[1][z]})),ar(D[1].map(function(x,z){return 2*x-D[0][z]}))]),w:'<p>New R2 = R2 \u2212 2\u00b7R1 = '+a+'.</p>'}}}
+home();
+})();
+</script></body></html>
